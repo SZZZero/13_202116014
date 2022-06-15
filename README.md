@@ -20,10 +20,10 @@ AVAudioPlayer를 이용하여 오디오 파일을 재생, 일시 정지 및 정�
         setPlayButtons(false, pause: false, stop: false)
 ```
 
-AudioRecorder의 델리게이트(Deligate)를 self로 설정합니다.     
-볼륨 슬라이더 값을 1.0으로 설정합니다.    
-audioPlayer의 볼륨도 슬라이더 값과 동일한 1.0으로 설정합니다.
-[play], [Pause], [stop] 버튼을 비활성화로 설정합니다.     
+AudioRecorder의 델리게이트(Deligate)를 self로 설정한다.     
+볼륨 슬라이더 값을 1.0으로 설정한다.    
+audioPlayer의 볼륨도 슬라이더 값과 동일한 1.0으로 설정한다.
+[play], [Pause], [stop] 버튼을 비활성화로 설정한다.     
 
 
 ```
@@ -52,6 +52,33 @@ audioPlayer의 볼륨도 슬라이더 값과 동일한 1.0으로 설정합니다
 
 스위치가 [on]이 되었을 땐 ***녹음 모드*** 이므로 오디오 재생을 중지, ***isRecordMode의 값을 참(true)*** 으로 설정, [Record] 버튼과 녹음 시간을 활성화로 설정한다.    
 스위치가 [on]이 아닐 땐 ***재생 모드*** 이므로 ***isRecord의 값을 거짓(false)*** 으로 설정하고, [Record] 버튼과 녹음 시간을 비활설화하며, 녹음 시간은 0으로 초기화한다.    
-***selectionAudioFile*** 함수를 호출하여 오디오 파일을 선택하고, 모드에 따라 초기화할 함수를 호출합니다.    
+***selectionAudioFile*** 함수를 호출하여 오디오 파일을 선택하고, 모드에 따라 초기화할 함수를 호출한다.    
 
+
+```
+ @IBAction func btnRecord(_ sender: UIButton) {
+        if sender.titleLabel?.text == "Record" {
+            audioRecorder.record()
+            sender.setTitle("Stop", for: UIControl.State())
+            progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: timeRecordSelector, userInfo: nil, repeats: true)
+        } else {
+            audioRecorder.stop()
+            progressTimer.invalidate()
+            sender.setTitle("Record", for: UIControl.State())
+            btnPlay.isEnabled = true
+            initPlay()
+        }
+        stateView.image = UIImage(named: "record.png")
+    }
+```
+녹음할 때 타이머가 작동하도록 ***progressTime에 Timer.scheeduledTimer*** 함수를 사용하는데, 0.1초 간격으로 타이머를 생성한다.    
+***progressTimer.invalidate()*** 녹음이 중지되면 타이머를 무효화한다.
+
+
+```
+@objc func updateRecordTime() {
+        lblRecordTime.text = convertNSTimeInterval2String(audioRecorder.currentTime)
+```
+
+***updateRecordTime*** 함수는 타이머에 의해 0.1초 간격으로 이 함수를 실행하는데,, 그 때마다 녹음 시간이 표시된다.
 
