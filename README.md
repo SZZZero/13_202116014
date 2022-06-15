@@ -42,7 +42,9 @@ audioPlayer의 볼륨도 슬라이더 값과 동일한 1.0으로 설정한다.
             isRecordMode = true
             btnRecord.isEnabled = true
             lblRecordTime.isEnabled = true
-        } else {
+        } 
+        
+        else {
             isRecordMode = false
             btnRecord.isEnabled = false
             lblRecordTime.isEnabled = false
@@ -68,7 +70,9 @@ audioPlayer의 볼륨도 슬라이더 값과 동일한 1.0으로 설정한다.
             audioRecorder.record()
             sender.setTitle("Stop", for: UIControl.State())
             progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: timeRecordSelector, userInfo: nil, repeats: true)
-        } else {
+        } 
+        
+        else {
             audioRecorder.stop()
             progressTimer.invalidate()
             sender.setTitle("Record", for: UIControl.State())
